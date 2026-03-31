@@ -1,0 +1,27 @@
+name: Rain Notifier
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 8am Pakistan time
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r Day-35/requirements.txt
+
+      - name: Run rain check
+        env:
+          OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+        run: python Day-35/RainNotifier.py
