@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Invite</title>
+</head>
+<body>
+    <h1>IT'S MY BIRTHDAY!</h1>
+    <h2>ON THE 12TH OF JANUARY</h2>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOD47mTzM1hGf-eAI1EqgxIa6NNXjc15R8rA&s" alt="Birthday Cake" />
+    <h3>What To Bring:</h3>
+    <ul>
+        <li>Balloons(I love Balloons)</li>
+        <li>Cake(I love to eat)</li>
+        <li>An appetite(There will be lots of food)</li>
+    </ul>
+    <h3>This is where you need to go:</h3>
+    <a href="https://www.google.com/maps/place/Khanewal,+Pakistan/@30.2949749,71.8948592,13z/data=!3m1!4b1!4m6!3m5!1s0x393b550c5f88f047:0x487183f8641910b7!8m2!3d30.286416!4d71.9320259!16zL20vMGIxcnIx?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D">
+        Google Maps Link
+    </a>
+</body>
+</html>

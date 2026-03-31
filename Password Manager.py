@@ -1,0 +1,145 @@
+from tkinter import *
+from tkinter import messagebox
+import random
+import json
+# ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+def generate_password():
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+               'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+    nr_letters = random.randint(8, 10)
+    nr_symbols = random.randint(2, 4)
+    nr_numbers = random.randint(2, 4)
+
+    password_list = []
+
+    for char in range(nr_letters):
+        password_list.append(random.choice(letters))
+
+    for char in range(nr_symbols):
+        password_list += random.choice(symbols)
+
+    for char in range(nr_numbers):
+        password_list += random.choice(numbers)
+
+    random.shuffle(password_list)
+
+    password = ""
+    for char in password_list:
+        password += char
+    password_entry.insert(0, password)
+
+
+
+# ---------------------------- SAVE PASSWORD ------------------------------- #
+
+def add_button():
+    website = website_entry.get()
+    email = email_entry.get()
+    password  = password_entry.get()
+    new_data = {
+        website : {
+            "Email" : email,
+            "Password" : password
+        }
+    }
+
+    if not len(website) == 0:
+        if not len(email) == 0:
+            if not len(password) == 0:
+                is_ok = messagebox.askokcancel(title=website,
+                                               message=f"These are the credentials you entered: \nEmail: {email} \nPassword: {password} \nIs it okay to save?")
+                if is_ok:
+                    try:
+                        with open("data.json", "r") as data_file:
+                            data = json.load(data_file)
+                            data.update(new_data)
+                    except FileNotFoundError:
+                        data = new_data
+                        with open("data.json", "w") as data_file:
+                            json.dump(data, data_file, indent= 4)
+                    else:
+                        with open("data.json", "w") as data_file:
+                            json.dump(data, data_file, indent= 4)
+
+                    website_entry.delete(0, END)
+                    password_entry.delete(0, END)
+            else:
+                messagebox.showerror(title= "Insufficient Information", message= "Password entry CANNOT be empty")
+        else:
+            messagebox.showerror(title="Insufficient Information", message="Email entry CANNOT be empty")
+    else:
+        messagebox.showerror(title="Insufficient Information", message="Website entry CANNOT be empty")
+
+# ---------------------------- Searching ------------------------------- #
+
+def search_file():
+    to_search = website_entry.get()
+    if not to_search:
+        messagebox.showwarning(title="Missing Input", message="Please enter a website name to search.")
+        return
+
+    try:
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="No data file found.")
+    except json.JSONDecodeError:
+        messagebox.showerror(title="Error", message="Data file is corrupted.")
+    else:
+        if to_search in data:
+            s_email = data[to_search]["Email"]
+            s_password = data[to_search]["Password"]
+            messagebox.showinfo(title=to_search, message=f"Email: {s_email}\nPassword: {s_password}")
+        else:
+            messagebox.showinfo(title="Not Found", message=f"No details for '{to_search}' found.")
+
+
+# ---------------------------- UI SETUP ------------------------------- #
+
+window = Tk()
+window.title("Password Manager")
+window.config(padx= 20, pady= 20)
+
+canvas = Canvas(width= 200, height= 200)
+image = PhotoImage(file= "logo.png")
+canvas.create_image(100, 100, image= image)
+canvas.grid(column= 1, row= 0)
+
+#labels:
+
+website_label = Label(text= "Website:")
+email_label = Label(text= "Email/Username:")
+password_label = Label(text= "Password:")
+website_label.grid(column=0, row= 1)
+email_label.grid(column= 0, row= 2)
+password_label.grid(column=0, row= 3)
+
+#Entries:
+
+website_entry = Entry(width=21)
+website_entry.focus()
+email_entry = Entry(width=35)
+email_entry.insert(0, "abdullahkaleem0163@gmail.com")
+password_entry = Entry(width= 21)
+website_entry.grid(column= 1, row= 1, columnspan=2)
+email_entry.grid(column= 1, row= 2, columnspan=2)
+password_entry.grid(column=1, row= 3)
+
+#buttons:
+
+generate = Button(text= "Generate Password", command= generate_password)
+add = Button(text= "Add", width=36, command= add_button)
+search = Button(text= "Search", width= 13, command= search_file)
+generate.grid(column=2, row= 3)
+add.grid(column=1, row= 4, columnspan=2)
+search.grid(column= 2, row= 1)
+
+
+
+
+window.mainloop()
